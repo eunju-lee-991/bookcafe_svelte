@@ -1,5 +1,13 @@
 <script>
-	export let name;
+	import { beforeUpdate, afterUpdate, onMount, onDestroy } from 'svelte'
+	import axios from 'axios'
+
+	export let name; // props
+	onMount(() =>
+		axios.get(`http://localhost:8080/members`)
+			.then(response => console.log(response.data))
+
+	)
 </script>
 
 <main>

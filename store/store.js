@@ -1,3 +1,4 @@
 import { writable, readable } from 'svelte/store';
 
-export let restApiKey = readable('7bcfc7029ccb017c031af94a6e2dd46a');
+export let REST_API_KEY = readable('7bcfc7029ccb017c031af94a6e2dd46a');
+export let REDIRECT_URI = readable('http://localhost:5000/login/token');

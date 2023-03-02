@@ -3,7 +3,11 @@
     import { REST_API_KEY, REDIRECT_URI } from "../store/store.js";
     import axios from "axios";    
 
-    const loginUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+$REST_API_KEY+"&redirect_uri="+$REDIRECT_URI;
+    // if(loggedin) {
+    //     // 로그인 상태면 메인으로 보내기
+    // }
+
+    const loginUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+$REST_API_KEY+"&redirect_uri="+$REDIRECT_URI;//+"&scope=account_email,name,phone_number";
 
     const login = () => {
         location.href = loginUrl;

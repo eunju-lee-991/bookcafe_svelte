@@ -93,6 +93,8 @@
 </script>
 
 <main>
+    <button on:click={test}>TEST</button> 
+
     <h1>책을 검색하세요</h1>
 
     <input type="text" bind:value={searchWord} on:input={search} />

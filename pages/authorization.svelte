@@ -24,14 +24,19 @@ if (typeof window !== "undefined") {
 if(code != "" && code != null){
     axios.get('http://localhost:8080/api/login/token?code='+code,
     {
-      withCredentials: true
+      withCredentials: true // cross domain에서 쿠키 받기 위해서  credentials 설정
     }
     )
     .then((res) => {
       if(res.status == 200){
-        console.log(res.status);
-      console.log(res);
-      //setTimeout(() => location.replace('/main'), 1500);
+        console.log(res);
+
+        // memberId 쿠키 설정      
+        let loggedInId = res.data.member.id;
+        document.cookie = "memberId="+loggedInId;
+        
+        console.log(loggedInId);
+        setTimeout(() => location.replace('/main'), 1300);
       }
     })
     .catch((err)=>{

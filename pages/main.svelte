@@ -12,14 +12,39 @@
     let nextPage = 0;
     let isEnd = true;
 
+    const test = (name) => { // memberId 쿠키 가쟈오기 테스트
+        const cookies = document.cookie.split(";");
+
+        cookies.forEach(cookie => {
+            const _cookie = cookie.trim();
+            if(_cookie.startsWith(name+"=")){
+                console.log(cookie.substring(name.length + 1));
+                // return cookie.substring(name.length + 1);
+            }
+        });
+        console.log("null");
+        // return null;
+  }
+
+    //     axios.get('http://localhost:8080/testCookie',
+    //         {
+    //   withCredentials: true
+    // })
+    //     .then((res) => {
+    //   console.log(res);
+    //   //setTimeout(() => location.replace('/main'), 1500);
+    //   console.log(document.cookie);
+    // })
+        
+
     const onScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
 
-        console.log("scrollHeight: " + scrollHeight);
-        console.log("scrollTop: " + scrollTop);
-        console.log("clientHeight: " + clientHeight);
+        // console.log("scrollHeight: " + scrollHeight);
+        // console.log("scrollTop: " + scrollTop);
+        // console.log("clientHeight: " + clientHeight);
 
         if (scrollTop + clientHeight >= scrollHeight) {
             console.log("the end");
@@ -93,7 +118,7 @@
 </script>
 
 <main>
-    <button on:click={test}>TEST</button> 
+    <button on:click={() => test("memberId")}>TEST</button> 
 
     <h1>책을 검색하세요</h1>
 

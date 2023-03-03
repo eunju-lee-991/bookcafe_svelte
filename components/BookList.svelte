@@ -15,6 +15,7 @@
 <div>
     <p align="left"> <span>title:</span> {bookinfo.title} </p>
     <p align="left"> <span>authors:</span> {bookinfo.authors} </p>
+    <p align="left"> <span>isbn:</span> {bookinfo.isbn} </p>
     <p align="left"> <span>contents:</span> 
         {#if bookinfo.contents.length > 130 }            
         {slice(bookinfo.contents)}

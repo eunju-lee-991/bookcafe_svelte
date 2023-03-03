@@ -1,11 +1,16 @@
 <script>
 	import Main from "../pages/main.svelte";
-	import Login from "../pages/login.svelte";
-	import Logout from "../pages/logout.svelte";
+	import Login from "../pages/login/login.svelte";
+	import Logout from "../pages/login/logout.svelte";
 	import { Router, Link, Route } from "svelte-routing";
-	import Authorization from "../pages/authorization.svelte";
-
+	import Authorization from "../pages/login/authorization.svelte";
+    import { checkLogIn } from "../scripts/common.js";
+	
 	export let url = "";
+
+	let loggedIn = false;
+	loggedIn = checkLogIn();
+
 </script>
 
 <style>
@@ -33,8 +38,11 @@ nav a:hover {
 	<Router url={url}>
 		<nav>
 			<a href="/main">MAIN</a>
-			<a href="/login">LOGIN</a> 	
+			{#if loggedIn}
 			<a href="/logout">LOGOUT</a> 	
+		  	{:else}
+			  <a href="/login">LOGIN</a> 
+		  	{/if}	
 <!-- 
 			<Link to="/main">MAIN</Link>
 			<Link to="/login">LOGIN</Link> 	

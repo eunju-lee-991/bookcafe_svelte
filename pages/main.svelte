@@ -6,36 +6,11 @@
 
     //export let name; // props
     let h1;
-    let jsonData;
+    let searchSize = 5;
     let searchWord;
     let bookinfos = [];
     let nextPage = 0;
     let isEnd = true;
-
-    const test = (name) => { // memberId 쿠키 가쟈오기 테스트
-        const cookies = document.cookie.split(";");
-
-        cookies.forEach(cookie => {
-            const _cookie = cookie.trim();
-            if(_cookie.startsWith(name+"=")){
-                console.log(cookie.substring(name.length + 1));
-                // return cookie.substring(name.length + 1);
-            }
-        });
-        console.log("null");
-        // return null;
-  }
-
-    //     axios.get('http://localhost:8080/testCookie',
-    //         {
-    //   withCredentials: true
-    // })
-    //     .then((res) => {
-    //   console.log(res);
-    //   //setTimeout(() => location.replace('/main'), 1500);
-    //   console.log(document.cookie);
-    // })
-        
 
     const onScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
@@ -61,10 +36,10 @@
             isEnd = true;
             return;
         }
-
+        console.log("searchWord: " + searchWord);
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
-                params: { query: searchWord, size: 9 },
+                params: { query: searchWord, size: searchSize },
                 headers: {
                     Authorization: "KakaoAK " + $REST_API_KEY,
                 },
@@ -80,7 +55,7 @@
                 bookinfos = response.data.documents;
 
                 if (!isEnd) {
-                    nextPage = 2;
+                    nextPage = 2; 
                 }
             });
     };
@@ -92,7 +67,7 @@
 
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
-                params: { query: searchWord, size: 9, page: nextPage },
+                params: { query: searchWord, size: searchSize, page: nextPage },
                 headers: {
                     Authorization: "KakaoAK " + $REST_API_KEY,
                 },
@@ -118,17 +93,33 @@
 </script>
 
 <main>
-    <button on:click={() => test("memberId")}>TEST</button> 
+    <h1> </h1>
 
-    <h1>책을 검색하세요</h1>
-
-    <input type="text" bind:value={searchWord} on:input={search} />
+    <input class="custom-input" type="text" bind:value={searchWord} on:input={search} on:blur={(e) => {console.log("blur");}} />
 
     <BookList {bookinfos} />
-    <button on:click={nextSearch}> 더보기 </button>
 </main>
 
 <style>
+	h1 {
+		font-family: 'Noto Sans KR', sans-serif;
+	}
+
+.custom-input {
+  width: 450px;
+  height: 50px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #aca9a9;
+  font-size: 16px;
+  outline: none;
+}
+
+.custom-input:focus {
+  border-color: rgb(109, 110, 112);
+  box-shadow: 0 0 5px rgb(181, 183, 185);
+}
+
     main {
         text-align: center;
         padding: 1em;
@@ -137,9 +128,9 @@
     }
 
     h1 {
-        color: #ff3e00;
+        color: #553024;
+        font-size: 20px;
         text-transform: uppercase;
-        font-size: 4em;
         font-weight: 100;
     }
 

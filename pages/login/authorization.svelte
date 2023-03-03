@@ -30,13 +30,16 @@ if(code != "" && code != null){
     .then((res) => {
       if(res.status == 200){
         console.log(res);
+        let propertyCookie = "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
 
         // memberId 쿠키 설정      
-        let loggedInId = res.data.member.id;
-        document.cookie = "memberId="+loggedInId;
+        let loggedInId = res.data.member.id;        
+        let nickname = res.data.member.nickname;
+        document.cookie = "memberId="+loggedInId+propertyCookie;
+        document.cookie = "nickname="+nickname+propertyCookie;
         
         console.log(loggedInId);
-        setTimeout(() => location.replace('/main'), 1300);
+        setTimeout(() => location.replace('/main'), 300);
       }
     })
     .catch((err)=>{

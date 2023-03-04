@@ -7,7 +7,7 @@
 
     //export let name; // props
     let h1;
-    let searchSize = 15;
+    let searchSize = 5;
     let searchWord;
     let bookinfos = [];
     let nextPage = 0;
@@ -30,9 +30,24 @@
     };
 
     const search = (e) => {
-        nextPage = 0;
+        nextPage = 0;        
+        /**
+         * 
+         * TEST!!!!!!!!!!!!!
+         * 
+        */
+        if (!searchWord) {
+            searchWord = 'test';
+        }
+        
+        if(e){
         searchWord = e.target.value;
+        }
+
         console.log("call search");
+        
+
+
         if (!searchWord) {
             bookinfos = [];
             h1.innerText = "검색어를 입력해주세요";
@@ -89,9 +104,15 @@
             });
     };
 
-    onMount(() => {
+    onMount((e) => {
         document.addEventListener("scroll", onScroll);
         h1 = document.querySelector("h1");
+        /**
+         * 
+         * TEST!!!!!!
+         * 
+        */
+        search(e);
     });
 </script>
 
@@ -101,7 +122,6 @@
     <input
         class="custom-input"
         type="text"
-        bind:value={searchWord}
         on:input={debouncedSearch}
         style="margin-bottom: 70px;"
     />

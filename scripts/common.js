@@ -17,7 +17,7 @@ export const getCookie = (name) => {
     cookies.forEach(cookie => {
         const _cookie = cookie.trim();
         if(_cookie.startsWith(name+"=")){
-            value = cookie.substring(name.length + 1);
+            value = _cookie.substring(name.length + 1);
         }
     });
     console.log(name + "의 cookie=" + value);

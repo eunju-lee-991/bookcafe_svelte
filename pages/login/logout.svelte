@@ -19,6 +19,7 @@
         deleteCookie("memberId");
         deleteCookie("nickname");
         
+        alert('로그아웃 되었습니다.');
         location.replace('/main');
     }).catch((err) => {
         console.log(err);        

@@ -3,23 +3,25 @@
     import { REST_API_KEY } from "../store/store.js";
     import axios from "axios";
     import BookList from "../components/BookList.svelte";
+  import { debounce } from 'lodash';
 
     //export let name; // props
     let h1;
-    let searchSize = 5;
+    let searchSize = 15;
     let searchWord;
     let bookinfos = [];
     let nextPage = 0;
     let isEnd = true;
 
+    const debouncedSearch = debounce((e) => {
+        console.log("delayed search word : "+ e.target.value);
+        search(e);
+    }, 300);
+
     const onScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
-
-        // console.log("scrollHeight: " + scrollHeight);
-        // console.log("scrollTop: " + scrollTop);
-        // console.log("clientHeight: " + clientHeight);
 
         if (scrollTop + clientHeight >= scrollHeight) {
             console.log("the end");
@@ -27,16 +29,17 @@
         }
     };
 
-    const search = () => {
+    const search = (e) => {
         nextPage = 0;
-
+        searchWord = e.target.value;
+        console.log("call search");
         if (!searchWord) {
             bookinfos = [];
             h1.innerText = "검색어를 입력해주세요";
             isEnd = true;
             return;
         }
-        console.log("searchWord: " + searchWord);
+        console.log("searchWord ..e.target.value : " + searchWord);
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
                 params: { query: searchWord, size: searchSize },
@@ -55,7 +58,7 @@
                 bookinfos = response.data.documents;
 
                 if (!isEnd) {
-                    nextPage = 2; 
+                    nextPage = 2;
                 }
             });
     };
@@ -64,7 +67,7 @@
         if (isEnd) {
             return;
         }
-
+        console.log("nextSearch");
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
                 params: { query: searchWord, size: searchSize, page: nextPage },
@@ -93,32 +96,38 @@
 </script>
 
 <main>
-    <h1> </h1>
+    <h1 />
 
-    <input class="custom-input" type="text" bind:value={searchWord} on:input={search} on:blur={(e) => {console.log("blur");}} />
+    <input
+        class="custom-input"
+        type="text"
+        bind:value={searchWord}
+        on:input={debouncedSearch}
+        style="margin-bottom: 70px;"
+    />
 
     <BookList {bookinfos} />
 </main>
 
 <style>
-	h1 {
-		font-family: 'Noto Sans KR', sans-serif;
-	}
+    h1 {
+        font-family: "Noto Sans KR", sans-serif;
+    }
 
-.custom-input {
-  width: 450px;
-  height: 50px;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #aca9a9;
-  font-size: 16px;
-  outline: none;
-}
+    .custom-input {
+        width: 450px;
+        height: 50px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #aca9a9;
+        font-size: 16px;
+        outline: none;
+    }
 
-.custom-input:focus {
-  border-color: rgb(109, 110, 112);
-  box-shadow: 0 0 5px rgb(181, 183, 185);
-}
+    .custom-input:focus {
+        border-color: rgb(109, 110, 112);
+        box-shadow: 0 0 5px rgb(181, 183, 185);
+    }
 
     main {
         text-align: center;

@@ -5,6 +5,8 @@
 
     let canWrite = false;
     let buttonContents = "리뷰쓰기";
+    console.log("bookinfo")
+    console.log(bookinfo);
 
     let slice = (str) => {
         str = str.substr(0, 130);
@@ -51,7 +53,6 @@
             bookTitle: bookinfo.title,
         };
 
-        console.log(reviewForm)
         axios
             .post(
                 "http://localhost:8080/reviews",
@@ -66,7 +67,8 @@
             .then((res) => {
                 console.log(res);
                 const reviewId = res.data.reviewId;
-                console.log(reviewId)
+                alert('정상적으로 리뷰가 등록되었습니다.');
+                location.href = 'reviews/'+reviewId;
             })
             .catch((err) => {
                 console.log(err);
@@ -93,7 +95,7 @@
             <p>isbn: {bookinfo.isbn}</p>
             <p>
                 contents:
-                {#if bookinfo.contents.length > 130}
+                {#if bookinfo.contents && bookinfo.contents.length > 130}
                     {slice(bookinfo.contents)}
                 {:else}
                     {bookinfo.contents}

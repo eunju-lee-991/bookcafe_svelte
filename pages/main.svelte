@@ -56,8 +56,8 @@
         }
         console.log("searchWord ..e.target.value : " + searchWord);
         axios
-            .get("https://dapi.kakao.com/v3/search/book?target=title", {
-                params: { query: searchWord, size: searchSize },
+            .get("https://dapi.kakao.com/v3/search/book", {
+                params: { target: 'title', query: searchWord, size: searchSize },
                 headers: {
                     Authorization: "KakaoAK " + $REST_API_KEY,
                 },
@@ -75,6 +75,10 @@
                 if (!isEnd) {
                     nextPage = 2;
                 }
+            })
+            .catch((error) => {
+                console.log(error);
+                alert("에러가 발생했습니다.");
             });
     };
     // nextPage

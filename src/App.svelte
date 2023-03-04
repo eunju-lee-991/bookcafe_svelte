@@ -5,6 +5,7 @@
 	import { Router, Link, Route } from "svelte-routing";
 	import Authorization from "../pages/login/authorization.svelte";
 	import { getCookie, checkLogIn } from "../scripts/common.js";
+	import ReviewDetail from "../pages/review/reviewDetail.svelte";
 
 	export let url = "";
 
@@ -37,6 +38,7 @@
 			<Route path="login" component={Login} />
 			<Route path="login/token" component={Authorization} />
 			<Route path="logout" component={Logout} />
+			<Route path="reviews/:reviewId" component={ReviewDetail} />
 		</div>
 	</Router>
 </main>

@@ -3,7 +3,7 @@
     import { REST_API_KEY } from "../store/store.js";
     import axios from "axios";
     import BookList from "../components/BookList.svelte";
-  import { debounce } from 'lodash';
+    import { debounce } from "lodash";
 
     //export let name; // props
     let h1;
@@ -14,61 +14,61 @@
     let isEnd = true;
 
     const debouncedSearch = debounce((e) => {
-        console.log("delayed search word : "+ e.target.value);
+        console.log("delayed search word : " + e.target.value);
         search(e);
     }, 300);
 
     const onScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
-        const scrollTop = document.documentElement.scrollTop;
+        const scrollTop =
+            document.documentElement.scrollTop || document.body.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
 
-        if (scrollTop + clientHeight >= scrollHeight) {
+        if (scrollTop + clientHeight + 5 >= scrollHeight) {
             console.log("the end");
             nextSearch();
         }
-    };
+    }
 
     const search = (e) => {
-        nextPage = 0;        
+        nextPage = 0;
+
         /**
-         * 
+         *
          * TEST!!!!!!!!!!!!!
-         * 
-        */
+         *
+         */
         if (!searchWord) {
-            searchWord = 'test';
+            searchWord = "test";
         }
-        
-        if(e){
-        searchWord = e.target.value;
+
+        if (e) {
+            searchWord = e.target.value;
         }
 
         console.log("call search");
-        
-
 
         if (!searchWord) {
             bookinfos = [];
-            h1.innerText = "검색어를 입력해주세요";
             isEnd = true;
             return;
         }
         console.log("searchWord ..e.target.value : " + searchWord);
         axios
             .get("https://dapi.kakao.com/v3/search/book", {
-                params: { target: 'title', query: searchWord, size: searchSize },
+                params: {
+                    target: "title",
+                    query: searchWord,
+                    size: searchSize,
+                },
                 headers: {
                     Authorization: "KakaoAK " + $REST_API_KEY,
                 },
             })
             .then((response) => {
-                h1.innerText = "total count: " + response.data.meta.total_count;
+                const totalCount = response.data.meta.total_count;
+                console.log( "total count: " + totalCount);
                 isEnd = response.data.meta.is_end;
-
-                if (response.data.meta.total_count == 0) {
-                    return;
-                }
 
                 bookinfos = response.data.documents;
 
@@ -86,7 +86,7 @@
         if (isEnd) {
             return;
         }
-        console.log("nextSearch");
+        const totalCount = response.data.meta.total_count;
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
                 params: { query: searchWord, size: searchSize, page: nextPage },
@@ -95,12 +95,10 @@
                 },
             })
             .then((response) => {
-                if (response.data.meta.total_count == 0) {
+                if (totalCount == 0) {
                     return;
                 }
-                h1.innerText = "total count: " + response.data.meta.total_count;
                 bookinfos = bookinfos.concat(response.data.documents);
-                console.log("nextPage: " + nextPage);
                 isEnd = response.data.meta.is_end;
                 if (!isEnd) {
                     nextPage++;
@@ -111,11 +109,12 @@
     onMount((e) => {
         document.addEventListener("scroll", onScroll);
         h1 = document.querySelector("h1");
+
         /**
-         * 
+         *
          * TEST!!!!!!
-         * 
-        */
+         *
+         */
         search(e);
     });
 </script>

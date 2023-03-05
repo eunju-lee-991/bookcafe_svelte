@@ -1,23 +1,47 @@
 <script>
     export let bookinfo = {};
+    export let writable = false;
     import axios from "axios";
-    import { getCookie } from "../scripts/common.js";
+    import { beforeUpdate, afterUpdate, onMount, onDestroy } from "svelte";
+    import { getCookie, checkLogIn } from "../scripts/common.js";
 
+    let scrollPosition = 0;
     let canWrite = false;
     let buttonContents = "리뷰쓰기";
-    console.log("bookinfo")
-    console.log(bookinfo);
+    let contentLength = 220;
 
-    let slice = (str) => {
-        str = str.substr(0, 130);
+    const slice = (str, length) => {
+        str = str.substr(0, length);
         str += "...";
         return str;
-    };
+    }
+
+    afterUpdate(() => {
+        scrollPosition = window.pageYOffset;
+    });
 
     const toggleWriteReview = () => {
+        if (!checkLogIn()) {
+            alert("로그인 후 작성 가능합니다.");
+            return;
+        }
+
+        if (!canWrite && document.getElementById("title") != null) { // 리뷰 쓰기를 눌렀는데 다른 리뷰작성 창이 열려있는 경우
+            alert("작성 중인 리뷰가 있습니다");
+            return;
+        }
+
         canWrite = !canWrite;
+
         if (canWrite) {
             buttonContents = "닫기";
+
+            const prevHeight = document.body.scrollHeight; // 리뷰쓰기 모드일 때 스크롤 조금 아래로 내리기
+            setTimeout(() => {
+                const newHeight = document.body.scrollHeight;
+                window.scrollTo(0, newHeight - prevHeight + scrollPosition);
+            }, 100); 
+
         } else {
             buttonContents = "리뷰쓰기";
         }
@@ -27,7 +51,9 @@
         const _title = document.getElementById("title").value;
         const _contents = document.getElementById("contents").value;
         const _memberId = getCookie("memberId");
-        let _isbn = bookinfo.isbn.includes(' ') ? bookinfo.isbn.split(' ')[1] : bookinfo.isbn;
+        let _isbn = bookinfo.isbn.includes(" ")
+            ? bookinfo.isbn.split(" ")[1]
+            : bookinfo.isbn;
 
         console.log(_title);
         console.log(_contents);
@@ -51,7 +77,7 @@
             contents: _contents,
             isbn: _isbn,
             bookTitle: bookinfo.title,
-        };
+        }
 
         axios
             .post(
@@ -67,41 +93,41 @@
             .then((res) => {
                 console.log(res);
                 const reviewId = res.data.reviewId;
-                alert('정상적으로 리뷰가 등록되었습니다.');
-                location.href = 'reviews/'+reviewId;
+                alert("정상적으로 리뷰가 등록되었습니다.");
+                location.href = "reviews/" + reviewId;
             })
             .catch((err) => {
                 console.log(err);
                 alert("오류가 발생했습니다");
             });
-    };
+    }
 </script>
 
 <main>
     <div
         class="container"
-        style="border: 1px solid black; border-radius: 5px; border-color: #BEBEBE;"
+        style="border: 1px solid black; border-radius: 10px; border-color: #BEBEBE;"
     >
         <div class="image-wrapper">
             <img src={bookinfo.thumbnail} alt="이미지를 표시할 수 없습니다" />
         </div>
         <div class="content-wrapper">
-            <div class="button-wrapper">
-                <button on:click={toggleWriteReview}>{buttonContents}</button>
-                <button>리뷰보기</button>
-            </div>
-            <h2>{bookinfo.title}</h2>
-            <p>authors: {bookinfo.authors}</p>
-            <p>isbn: {bookinfo.isbn}</p>
-            <p>
-                contents:
-                {#if bookinfo.contents && bookinfo.contents.length > 130}
-                    {slice(bookinfo.contents)}
+            {#if writable}
+                <div class="button-wrapper">
+                    <button on:click={toggleWriteReview}
+                        >{buttonContents}</button
+                    >
+                </div>
+            {/if}
+            <h1>{bookinfo.title}</h1>
+            <p style="margin-right: 17px;">
+                {#if bookinfo.contents && bookinfo.contents.length > contentLength}
+                    {slice(bookinfo.contents, contentLength)}
                 {:else}
                     {bookinfo.contents}
                 {/if}
             </p>
-            <p>publisher: {bookinfo.publisher}</p>
+            <p>저자: {bookinfo.authors} | 출판사: {bookinfo.publisher}</p>
         </div>
     </div>
     {#if canWrite}
@@ -149,7 +175,8 @@
 
     p {
         margin: 1px;
-        color: #333; /* 글꼴 색상 */
+        margin-top: 15px;
+        color: #1b1b1b; /* 글꼴 색상 */
         line-height: 2;
         font-size: 18px;
         font-weight: 300;
@@ -157,9 +184,9 @@
     }
 
     .container {
-        width: 1300px;
-        margin: 30px;
-        padding: 5px;
+        width: 1100px;
+        margin: 50px;
+        padding: 15px;
         display: flex;
         align-items: center; /* 이미지와 나머지 요소를 세로 방향으로 정렬 */
         gap: 20px; /* 이미지와 나머지 요소 사이의 간격 */

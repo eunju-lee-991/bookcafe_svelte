@@ -6,6 +6,8 @@
 	import Authorization from "../pages/login/authorization.svelte";
 	import { getCookie, checkLogIn } from "../scripts/common.js";
 	import ReviewDetail from "../pages/review/reviewDetail.svelte";
+	import ReviewList from "../pages/review/reviewList.svelte";
+import MemberReviewList from "../pages/review/memberReviewList.svelte";
 
 	export let url = "";
 
@@ -18,7 +20,10 @@
 	<Router {url}>
 		<nav>
 			<a href="/main">MAIN</a>
+			<a href="/reviews">REVIEWS</a>
 			{#if loggedIn}
+			<!-- 나중에 마이페이지 안에서 my review 조회할 수 있게  -->
+			<a href="/members/:id/reviews">MY REVIEW</a>
 				<a href="/logout">LOGOUT</a>
 			{:else}
 				<a href="/login">LOGIN</a>
@@ -38,7 +43,9 @@
 			<Route path="login" component={Login} />
 			<Route path="login/token" component={Authorization} />
 			<Route path="logout" component={Logout} />
+			<Route path="reviews" component={ReviewList} />
 			<Route path="reviews/:reviewId" component={ReviewDetail} />
+			<Route path="/members/:id/reviews" component={MemberReviewList} />
 		</div>
 	</Router>
 </main>

@@ -1,12 +1,12 @@
 <script>
-    import BookInfo from "./Bookinfo.svelte";
+    import BookInformation from "./BookInformation.svelte";
     export let bookinfos = [];
 </script>
 
 <main>
     <div class="bookinfo-container">
         {#each bookinfos as bookinfo}
-            <BookInfo {bookinfo} />
+            <BookInformation {bookinfo} writable={true}  />
         {/each}
     </div>
 </main>

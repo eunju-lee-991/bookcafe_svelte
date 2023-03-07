@@ -33,7 +33,7 @@
                   class={isCliked == true ? "active" : ""}
                />
             </button>
-            <span> LIKE : like숫자</span>
+            <span> {reviewDetails.likeCount} 명이 좋아합니다.</span>
          </div>
       </div>
    </div>
@@ -43,7 +43,14 @@
    .like-wrapper {
       align-self: flex-end;
       margin: 15px;
+      color: #e0dfe6;
+      align-items: center;
    }
+
+   .like-wrapper span{
+      font-size: 17px;
+   }
+
    button {
       margin-right: 10px;
       border-radius: 25px;

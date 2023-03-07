@@ -24,7 +24,7 @@
 
     const login = () => {
         location.href = loginUrl;
-    };
+    }
 </script>
 
 <main id="main">
@@ -53,9 +53,11 @@
         justify-content: center;
         width: 100%;
         height: 100vh;
-        background-image: url("../images/book_background.jpg");
+        /* background-image: url("../images/book_background.jpg");
         background-repeat: no-repeat;
         background-size: cover;
-        background-position: center center;
+        background-position: center center; */
+        background-color: #222;
+        height: 100vh;
     }
 </style>

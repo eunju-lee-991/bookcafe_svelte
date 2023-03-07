@@ -3,8 +3,7 @@
  
  </script>
  
- <main>
-    <span style="font-size: 30px; color:brown">♣♣♣♣</span>    
+ <main> 
     <div id="review-form" class="review-container">
        <div class="review-wrapper">
           <div class="title-wrapper">
@@ -30,9 +29,10 @@
     }
  
     .review-container {
-       /* border: 1px solid black; */
-       border-top: 2px solid black;
-       border-bottom: 2px solid black;
+        background-color: #65646d; /* 배경색 */
+        border-top: 3px solid rgb(0, 0, 0);
+        border-bottom: 3px solid rgb(0, 0, 0);
+        border-radius: 15px;
        display: flex; /* inner-div를 flex container로 설정 */
        justify-content: space-between;
        align-items: center;
@@ -54,41 +54,55 @@
        flex-direction: row;
        margin-bottom: 10px;
     }
- 
+
+    input {
+        flex: 1;
+        border: none;
+        border-right: 1px solid #ddd;
+        border-radius: 5px ;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
     .additional span {
+      color: black;
        margin: 5px;
     }
     .additional .delimiter {
        font-weight: bold;
-       color: #757272;
+       color: #333232;
     }
     .quotation {
        font-family: fantasy;
        font-size: 45px;
        margin: 11px;
+       color: whitesmoke;
     }
     textarea{
-        width: 60%;
-        height: 170px;
+        width: 68%;
+        height: 150px;
        font-size: 20px;
         margin-bottom: 40px;
+        flex: 1;
+        border: none;
+        border-right: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        box-sizing: border-box;
     }
     .title {
         width: 85%;
        font-size: 20px;
+       margin-top: 10px;
         margin-bottom: 40px;
     }
     .title-wrapper {
-       width: 70%;
+       width: 75%;
        display: flex;
        justify-content: center;
        align-items: center;
        flex-direction: row;
        margin: 15px;
-    }
-    p {
-       margin: 45px;
-       font-size: 20px;
     }
  </style>
  

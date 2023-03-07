@@ -7,13 +7,14 @@
 	import { getCookie, checkLogIn } from "../scripts/common.js";
 	import ReviewDetail from "../pages/review/reviewDetail.svelte";
 	import ReviewList from "../pages/review/reviewList.svelte";
-import MemberReviewList from "../pages/review/memberReviewList.svelte";
+	import Mypage from "../pages/myPage.svelte";
+	import MemberReviewList from "../pages/review/memberReviewList.svelte";
 
 	export let url = "";
 
-	let loggedIn = false;
+	let loggedIn = checkLogIn();
+	let memberId = getCookie("memberId");
 	let nickname = getCookie("nickname");
-	loggedIn = checkLogIn();
 </script>
 
 <main>
@@ -22,20 +23,17 @@ import MemberReviewList from "../pages/review/memberReviewList.svelte";
 			<a href="/main">MAIN</a>
 			<a href="/reviews">REVIEWS</a>
 			{#if loggedIn}
-			<!-- 나중에 마이페이지 안에서 my review 조회할 수 있게  -->
-			<a href="/members/:id/reviews">MY REVIEW</a>
 				<a href="/logout">LOGOUT</a>
 			{:else}
 				<a href="/login">LOGIN</a>
 			{/if}
 			{#if nickname}
-				<span class="welcome"> {nickname}님, 환영합니다 </span>
+				<span class="welcome"> <a href="/members/{memberId}" class="nickname"> {nickname}</a>님, 환영합니다 </span>
 			{/if}
 			<!-- 
 			<Link to="/main">MAIN</Link>
 			<Link to="/login">LOGIN</Link> 	
 			<Link to="/logout">LOGOUT</Link> 	 -->
-
 		</nav>
 		<div>
 			<Route path="" component={Main} />
@@ -45,6 +43,7 @@ import MemberReviewList from "../pages/review/memberReviewList.svelte";
 			<Route path="logout" component={Logout} />
 			<Route path="reviews" component={ReviewList} />
 			<Route path="reviews/:reviewId" component={ReviewDetail} />
+			<Route path="/members/:id" component={Mypage} />
 			<Route path="/members/:id/reviews" component={MemberReviewList} />
 		</div>
 	</Router>
@@ -55,8 +54,9 @@ import MemberReviewList from "../pages/review/memberReviewList.svelte";
 		display: flex;
 		justify-content: flex-start; /* Change this */
 		align-items: center;
-		background-color: #333;
+		background-color: #303030;
 		padding: 10px;
+		height: 50px;
 		color: #fff;
 	}
 
@@ -73,5 +73,13 @@ import MemberReviewList from "../pages/review/memberReviewList.svelte";
 	.welcome {
 		margin-left: auto;
 		margin-right: 20px;
+	}
+
+	.nickname {
+		margin: 2px;
+		margin-right: 6px;
+		font-size: 16.5px;
+		text-decoration: solid;
+        cursor: pointer; /* 포인터 모양으로 변경 */
 	}
 </style>

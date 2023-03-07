@@ -1,6 +1,5 @@
 <script>
     import axios from "axios";
-    import { onMount } from "svelte";
     import { REST_API_KEY } from "../../store/store.js";
     import ReviewDetail from "../../components/ReviewDetail.svelte"; // component import
     import ReviewUpdateForm from "../../components/ReviewUpdateForm.svelte"; // component import
@@ -8,58 +7,76 @@
     import { getCookie } from "../../scripts/common.js";
 
     export let reviewId;
+
     let isUpdateState = false;
 
     const memberId = getCookie("memberId");
 
     const showUpdateForm = () => {
         isUpdateState = true;
-    }
+    };
 
     const cancleUpdate = () => {
         isUpdateState = false;
-    }
+    };
 
     const updateReview = () => {
-        const aa = document.getElementById("edit-contents");
-        console.log(aa.value); 
+        const editTitle = document.getElementById("edit-title").value;
+        const editContents = document.getElementById("edit-contents").value;
+        console.log(editTitle);
+        console.log(editContents);
 
+        const data = {
+            title : editTitle,
+            contents : editContents 
+        }
 
-
-
-
-
-    }
-
-
-    const deleteReview = () => {
         axios
-            .delete("http://localhost:8080/reviews/" + reviewId, {
-                withCredentials: true, 
+            .patch("http://localhost:8080/reviews/" + reviewId, data, {
+                withCredentials: true,
             })
             .then((res) => {
                 console.log(res);
-                location.replace('/main');
+                const updatedId = res.data.reviewId;
+                location.replace("/reviews/"+updatedId);
             })
             .catch((err) => {
                 console.log(err);
                 alert("오류가 발생했습니다");
             });
-    }
+    };
+
+    const deleteReview = () => {
+        if (!confirm("정말 삭제하시겠습니까?")) {
+            return;
+        }
+        axios
+            .delete("http://localhost:8080/reviews/" + reviewId, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log(res);
+                location.replace("/main");
+            })
+            .catch((err) => {
+                console.log(err);
+                alert("오류가 발생했습니다");
+            });
+    };
 
     let reviewDetails = {};
     let bookinfo = {};
 
     axios
         .get("http://localhost:8080/reviews/" + reviewId, {
-            withCredentials: true, 
+            withCredentials: true,
         })
         .then((res) => {
             console.log(res);
             reviewDetails = res.data.review;
             let myIsbn = reviewDetails.isbn;
 
-            getBookInfo(myIsbn);
+            bookinfo = getBookInfo(myIsbn);
         })
         .catch((err) => {
             console.log(err);
@@ -90,8 +107,8 @@
         {#if isUpdateState}
             <ReviewUpdateForm {reviewDetails} />
             <div class="button-wrapper">
-                <button id="cancle-button" on:click={cancleUpdate}>취소</button>
                 <button id="update-button" on:click={updateReview}>완료</button>
+                <button id="cancle-button" on:click={cancleUpdate}>취소</button>
             </div>
         {:else}
             <ReviewDetail {reviewDetails} />
@@ -118,8 +135,7 @@
     .button-wrapper {
         display: flex;
         flex-direction: row;
-        align-self: flex-end;
-        margin-right: 11%;
+        align-self: center;
         margin-bottom: 40px;
         /* align-items: center; */
     }
@@ -127,5 +143,14 @@
         font-family: "Courier New", Courier, monospace;
         padding: 8px;
         margin-left: 15px;
+        border-radius: 10px;
+    }
+
+    main {
+        padding: 20px;
+        padding-left: 14%;
+        text-align: center;
+        background-color: #222;
+        height: 100%;
     }
 </style>

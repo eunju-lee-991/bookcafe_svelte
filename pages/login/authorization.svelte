@@ -52,5 +52,14 @@ if(code != "" && code != null){
 }
 
 </script>
+<main>
+  <h1> {message} </h1>
+</main>
 
-<h1> {message} </h1>
+
+<style>
+      main{
+        background-color: #222;
+        height: 100vh;
+    }
+</style>

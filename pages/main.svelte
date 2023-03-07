@@ -15,8 +15,13 @@
 
     const debouncedSearch = debounce((e) => {
         console.log("delayed search word : " + e.target.value);
-        search(e);
-    }, 300);
+
+        if(e){
+            searchWord = e.target.value;
+            search(e);
+        }
+
+    }, 200);
 
     const onScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
@@ -28,32 +33,16 @@
             console.log("the end");
             nextSearch();
         }
-    }
+    };
 
     const search = (e) => {
         nextPage = 0;
-
-        /**
-         *
-         * TEST!!!!!!!!!!!!!
-         *
-         */
-        if (!searchWord) {
-            searchWord = "test";
-        }
-
-        if (e) {
-            searchWord = e.target.value;
-        }
-
-        console.log("call search");
 
         if (!searchWord) {
             bookinfos = [];
             isEnd = true;
             return;
         }
-        console.log("searchWord ..e.target.value : " + searchWord);
         axios
             .get("https://dapi.kakao.com/v3/search/book", {
                 params: {
@@ -67,11 +56,10 @@
             })
             .then((response) => {
                 const totalCount = response.data.meta.total_count;
-                console.log( "total count: " + totalCount);
+                console.log("total count: " + totalCount);
                 isEnd = response.data.meta.is_end;
 
                 bookinfos = response.data.documents;
-
                 if (!isEnd) {
                     nextPage = 2;
                 }
@@ -86,7 +74,6 @@
         if (isEnd) {
             return;
         }
-        const totalCount = response.data.meta.total_count;
         axios
             .get("https://dapi.kakao.com/v3/search/book?target=title", {
                 params: { query: searchWord, size: searchSize, page: nextPage },
@@ -95,6 +82,7 @@
                 },
             })
             .then((response) => {
+                const totalCount = response.data.meta.total_count;
                 if (totalCount == 0) {
                     return;
                 }
@@ -108,47 +96,36 @@
 
     onMount((e) => {
         document.addEventListener("scroll", onScroll);
-        h1 = document.querySelector("h1");
-
-        /**
-         *
-         * TEST!!!!!!
-         *
-         */
         search(e);
     });
 </script>
 
 <main>
-    <h1 />
+    <h1>리뷰 작성할 책을 검색하세요</h1>
 
-    <input
-        class="custom-input"
-        type="text"
-        on:input={debouncedSearch}
-        style="margin-bottom: 70px;"
-    />
-
-    <BookList {bookinfos} />
+    <input class="custom-input" type="text" on:input={debouncedSearch} />
+    {#if bookinfos.length == 0 && searchWord != null && searchWord != ""}
+        <h2>찾으시는 검색 결과가 없습니다</h2>
+    {:else}
+        <BookList {bookinfos} />
+    {/if}
 </main>
 
 <style>
-    h1 {
-        font-family: "Noto Sans KR", sans-serif;
-    }
-
     .custom-input {
         width: 450px;
         height: 50px;
         padding: 8px;
         border-radius: 4px;
-        border: 1px solid #aca9a9;
+        border: 1px solid #d887b0;
         font-size: 16px;
         outline: none;
+        margin-bottom: 70px;
+        margin-top: 10px;
     }
 
     .custom-input:focus {
-        border-color: rgb(109, 110, 112);
+        border-color: #dd1e7e;
         box-shadow: 0 0 5px rgb(181, 183, 185);
     }
 
@@ -160,15 +137,16 @@
     }
 
     h1 {
-        color: #553024;
-        font-size: 20px;
-        text-transform: uppercase;
-        font-weight: 100;
+        color: #f1e7ed;
+        font-size: 30px;
+        font-weight: bold;
     }
 
     @media (min-width: 640px) {
         main {
             max-width: none;
+        background-color: #222;
+        height: 100vh;
         }
     }
 </style>

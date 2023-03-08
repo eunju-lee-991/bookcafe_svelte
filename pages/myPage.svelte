@@ -62,6 +62,7 @@
         padding: 3px;
         display: flex;
         align-items: center;
+        margin-right: 15px;
     }
 
     .info-wrapper {

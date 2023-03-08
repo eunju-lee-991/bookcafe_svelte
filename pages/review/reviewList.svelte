@@ -74,6 +74,7 @@
         const pageParams = {
             page: currentPage, // 1 이상의 숫자
             size: size, // 1 이상의 숫자 (나중에 validation으로 최대 사이즈 정하기)
+            order: "CREATEDDATE"
         };
 
         const mergedParams = { ...params, ...pageParams };

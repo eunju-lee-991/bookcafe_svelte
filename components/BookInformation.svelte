@@ -28,6 +28,7 @@
     const toggleWriteReview = () => {
         if (!checkLogIn()) {
             alert("로그인 후 작성 가능합니다.");
+            location.href = "/login";
             return;
         }
 
@@ -93,7 +94,7 @@
                     headers: {
                         "Content-Type": "application/json",
                     },
-                } // cross domain에서 쿠키 받기 위해서  credentials 설정!
+                } 
             )
             .then((res) => {
                 console.log(res);
@@ -101,8 +102,8 @@
                 alert("정상적으로 리뷰가 등록되었습니다.");
                 location.href = "reviews/" + reviewId;
             })
-            .catch((err) => {
-                console.log(err);
+            .catch((error) => {
+                console.log(error.response.data);
                 alert("오류가 발생했습니다");
             });
     };
@@ -244,6 +245,8 @@
         font-weight: bold;
         display: flex;
         margin-left: 15px;
+        font-size: 15px;
+        color: #f6f6fa;
     }
 
     input[type="text"],

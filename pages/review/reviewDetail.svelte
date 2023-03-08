@@ -72,7 +72,6 @@
             withCredentials: true,
         })
         .then((res) => {
-            console.log(res);
             reviewDetails = res.data.review;
             let myIsbn = reviewDetails.isbn;
 
@@ -92,7 +91,6 @@
                 },
             })
             .then((response) => {
-                console.log(response);
                 bookinfo = response.data.documents[0];
             })
             .catch((error) => {

@@ -1,13 +1,112 @@
 <script>
    import axios from "axios";
+   import { afterUpdate, onMount } from "svelte";
+   import { getCookie } from "../scripts/common.js";
    export let reviewDetails = {}; // Component 호출하는 곳에서 보내는 데이터 받기
+
+   let loginMemberId = getCookie("memberId");
+   let likeId;
    let isCliked;
+   let likeButton;
    let likeCount;
-   // axios.post로 /like
 
-   //get 할 때는 /reviews/:id/count-like
+   const clickLike = () => {
+      if (!loginMemberId) {
+         alert("로그인이 필요합니다.");
+         return;
+      }
+      if (loginMemberId == null) {
+         console.log("loginMemberId == null");
+      }
 
+      if (isCliked) {
+         cancleLike();
+      } else {
+         doLike();
+      }
+      isCliked = !isCliked;
+   };
 
+   const doLike = () => {
+      const data = {
+         reviewId: reviewDetails.reviewId,
+         memberId: loginMemberId,
+      };
+
+      axios
+         .post("http://localhost:8080/likes", data, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            console.log(response);
+            console.log(response.data.likeId);
+
+            likeId = response.data.likeId;
+            isCliked = true;
+            likeButton.classList.add("active");
+            likeCount += 1;
+         })
+         .catch((error) => {
+            console.log(error.response);
+         });
+   };
+
+   const cancleLike = () => {
+      console.log("delete " + likeId);
+
+      axios
+         .delete("http://localhost:8080/likes/" + likeId, {
+            withCredentials: true,
+         })
+         .then((response) => {
+            console.log(response.status);
+            likeId = null;
+            isCliked = false;
+            likeButton.classList.remove("active");
+            likeCount -= 1;
+         })
+         .catch((error) => {
+            console.log(error.response);
+         });
+   };
+
+   $: checkClick(reviewDetails); // reviewDetails 변경될 때마다 checkClikc 실행
+
+   const checkClick = () => {
+      likeCount = reviewDetails.likeCount; // reviewDetails 최초 변경 시 likeCount 세팅
+
+      if (Object.keys(reviewDetails).length === 0 || loginMemberId == null) {
+         return;
+      }
+
+      let params =
+         "?memberId=" + loginMemberId + "&reviewId=" + reviewDetails.reviewId;
+
+      console.log(params);
+
+      axios
+         .get("http://localhost:8080/likes" + params)
+         .then((response) => {
+            console.log(response);
+            console.log(response.data.likeId);
+
+            isCliked = response.data.clicked;
+            console.log(isCliked);
+
+            if (isCliked) {
+               likeId = response.data.likeId;
+               likeButton.classList.add("active");
+            } else {
+            }
+         })
+         .catch((error) => {
+            console.log(error.response);
+         });
+   };
+
+   onMount(() => {
+      likeButton = document.getElementById("likeButton");
+   });
 </script>
 
 <main>
@@ -26,14 +125,15 @@
          </div>
 
          <div class="like-wrapper">
-            <button on:click={() => isCliked = !isCliked}>
+            <button on:click={clickLike}>
                <img
                   src="/images/like-button.png"
-                  alt="sdasd"
+                  alt="LIKE"
+                  id="likeButton"
                   class={isCliked == true ? "active" : ""}
                />
             </button>
-            <span> {reviewDetails.likeCount} 명이 좋아합니다.</span>
+            <span> {likeCount} 명이 좋아합니다.</span>
          </div>
       </div>
    </div>
@@ -47,7 +147,7 @@
       align-items: center;
    }
 
-   .like-wrapper span{
+   .like-wrapper span {
       font-size: 17px;
    }
 

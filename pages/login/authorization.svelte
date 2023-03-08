@@ -12,7 +12,6 @@ if (typeof window !== "undefined") {
     parsed = queryString.parse(window.location.search);
 
     if(parsed.code != null){
-      console.log('this is the code: ' + parsed.code);
       code = parsed.code;
     }else if(parsed.error != null){
       // 로그인 취소 시 다시 로그인 화면으로 돌아감
@@ -38,13 +37,12 @@ if(code != "" && code != null){
         document.cookie = "memberId="+loggedInId+propertyCookie;
         document.cookie = "nickname="+nickname+propertyCookie;
         
-        console.log(loggedInId);
-        setTimeout(() => location.replace('/main'), 300);
+        setTimeout(() => location.replace('/main'), 100);
       }
     })
     .catch((err)=>{
       if(err.response){
-        console.log(err.response.data);
+        console.log(err.response.data); 
         alert("잘못된 접근입니다.");
         location.replace('/main');
       }

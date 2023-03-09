@@ -5,7 +5,7 @@
 
     let reviewList = [];
     let currentPage = 1;
-    let totalCount;
+    // let totalCount;
     let pageNums = [];
     let startPage;
     let endPage;
@@ -24,8 +24,7 @@
             .then((response) => {
                 console.log("first response");
                 console.log(response);
-                totalCount = response.data.total_count;
-                setPageAndData(currentPage, params);
+                setPageAndData(currentPage, params, response.data.total_count);
             })
             .catch((error) => {
                 console.log(error);
@@ -33,9 +32,9 @@
             });
     };
 
-    const setPageAndData = (clickedPageNum, params) => {
-        // 페이지 번호 눌렀을 때... params 어떻게 ?
+    const setPageAndData = (clickedPageNum, params, totalCount) => {
         let isSearching = false;
+
         if (searchParams != null && Object.keys(searchParams).length > 0) {
             isSearching = true;
         }
@@ -49,13 +48,7 @@
 
         currentPage = clickedPageNum;
 
-        const result = setPageInformation(
-            currentPage,
-            pageRangeSize,
-            size,
-            totalCount
-        );
-        console.log(result);
+        const result = setPageInformation(currentPage, pageRangeSize, size, totalCount);
 
         startPage = result.startPage;
         endPage = result.endPage;
@@ -73,7 +66,7 @@
 
         const pageParams = {
             page: currentPage, // 1 이상의 숫자
-            size: size, // 1 이상의 숫자 (나중에 validation으로 최대 사이즈 정하기)
+            size: size, // 1 이상의 숫자 
             order: "CREATEDDATE"
         };
 
@@ -84,19 +77,15 @@
     };
 
     const getReviewData = (params) => {
-        console.log("getReviewData");
-        console.log(params);
-
         axios
             .get("http://localhost:8080/reviews", {
                 params,
             })
             .then((response) => {
-                console.log(response);
                 reviewList = response.data.reviews;
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error.response.data);
                 alert("오류가 발생했습니다.");
             });
     };
@@ -259,5 +248,7 @@
         font-size: 30px;
         font-weight: bold;
         margin-bottom: 60px;
+        text-align: center;
+        margin-right: 120px;
     }
 </style>

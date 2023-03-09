@@ -38,9 +38,6 @@
             withCredentials: true,
          })
          .then((response) => {
-            console.log(response);
-            console.log(response.data.likeId);
-
             likeId = response.data.likeId;
             isCliked = true;
             likeButton.classList.add("active");
@@ -52,8 +49,6 @@
    };
 
    const cancleLike = () => {
-      console.log("delete " + likeId);
-
       axios
          .delete("http://localhost:8080/likes/" + likeId, {
             withCredentials: true,
@@ -70,10 +65,11 @@
          });
    };
 
-   $: checkClick(reviewDetails); // reviewDetails 변경될 때마다 checkClikc 실행
+   $: checkClick(reviewDetails); // reviewDetails 변경될 때마다 checkClikc 실행. 
+   // 변경감지 안해주면 최초 컴포넌트가 호출될 때의 reviewDetails는 null이기 때문에 likeCount = reviewDetails.likeCount의 결과도 null로 남아있음.
 
    const checkClick = () => {
-      likeCount = reviewDetails.likeCount; // reviewDetails 최초 변경 시 likeCount 세팅
+      likeCount = reviewDetails.likeCount; // reviewDetails 변경 시 likeCount 세팅
 
       if (Object.keys(reviewDetails).length === 0 || loginMemberId == null) {
          return;
@@ -82,16 +78,10 @@
       let params =
          "?memberId=" + loginMemberId + "&reviewId=" + reviewDetails.reviewId;
 
-      console.log(params);
-
       axios
          .get("http://localhost:8080/likes" + params)
          .then((response) => {
-            console.log(response);
-            console.log(response.data.likeId);
-
             isCliked = response.data.clicked;
-            console.log(isCliked);
 
             if (isCliked) {
                likeId = response.data.likeId;

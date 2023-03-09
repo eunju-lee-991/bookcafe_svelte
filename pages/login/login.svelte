@@ -29,22 +29,23 @@
 
 <main id="main">
     <button on:click={login}>
-        <img src="images/kakao_login_img.png" alt="이미지없음" />
+        <img src="images/kakao_login_img.png" alt="카카오 로그인" />
     </button>
 </main>
 
 <style>
-    img{
+    button img{
         width: 100%;
         height: 100%;
     }
 
     button {
-        width: 380px;
+        width: 350px;
         height: auto;
         border: none;
         cursor: pointer;
-        margin-top: 150px;
+        margin-top: 250px;
+        background-color: #222;
     }
 
     main {
@@ -53,10 +54,6 @@
         justify-content: center;
         width: 100%;
         height: 100vh;
-        /* background-image: url("../images/book_background.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center center; */
         background-color: #222;
         height: 100vh;
     }

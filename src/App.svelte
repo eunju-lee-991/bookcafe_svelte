@@ -28,12 +28,11 @@
 				<a href="/login">LOGIN</a>
 			{/if}
 			{#if nickname}
-				<span class="welcome"> <a href="/members/{memberId}" class="nickname"> {nickname}</a>님, 환영합니다 </span>
+				<span class="welcome"> 
+					<a href="/members/{memberId}" class="nickname"> {nickname}</a>
+					님, 환영합니다 
+				</span>
 			{/if}
-			<!-- 
-			<Link to="/main">MAIN</Link>
-			<Link to="/login">LOGIN</Link> 	
-			<Link to="/logout">LOGOUT</Link> 	 -->
 		</nav>
 		<div>
 			<Route path="" component={Main} />

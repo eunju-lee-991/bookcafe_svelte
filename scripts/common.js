@@ -28,7 +28,7 @@ export const deleteCookie = (name) => {
 export const setPageInformation = (currentPage, pageRangeSize, size, totalCount) => { //rangeSize 한 화면에 보여지는 페이지 갯수 ex. < 5 6 7 8 9 >
     const totalPageCount = Math.ceil(totalCount / size);
 
-    const range = Math.floor((currentPage-1) / pageRangeSize) + 1; // 현재 페이지가 속해있는 페이지의 범위..
+    const range = Math.floor((currentPage-1) / pageRangeSize) + 1; // 현재 페이지가 속해있는 페이지의 범위
     const startPage = (range - 1) * pageRangeSize + 1;
     let endPage = startPage + pageRangeSize - 1;
 

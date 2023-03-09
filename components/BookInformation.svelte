@@ -110,22 +110,14 @@
 </script>
 
 <main>
-    <div
-        class="container"
-        style="border: 3px solid black; border-radius: 10px; border-color: #BEBEBE;"
-    >
+    <div  class="container" style="border: 3px solid black; border-radius: 10px; border-color: #BEBEBE;">
         <div class="image-wrapper">
-            <img
-                src={bookinfo.thumbnail}
-                alt="도서의 이미지를 표시할 수 없습니다"
-            />
+            <img src={bookinfo.thumbnail}  alt="도서의 이미지를 표시할 수 없습니다"/>
         </div>
         <div class="content-wrapper" id="content-wrapper">
             {#if writable}
                 <div class="button-wrapper">
-                    <button on:click={toggleWriteReview}
-                        >{buttonContents}</button
-                    >
+                    <button on:click={toggleWriteReview}>{buttonContents}</button>
                 </div>
             {/if}
             <h1 >{bookinfo.title}</h1>
@@ -148,11 +140,7 @@
             <label for="contents">내용</label>
             <textarea id="contents" name="contents" />
 
-            <button
-                on:click={writeReview}
-                id="write-button"
-                style="width: 40px; display: flex; margin-left: 10px;"
-            >
+            <button on:click={writeReview} id="write-button" style="width: 40px; display: flex; margin-left: 10px;">
                 완료
             </button>
         </div>
@@ -165,7 +153,7 @@
         margin-bottom: 40px;
     }
     button {
-        background-color: #4caf50; /* 배경색 */
+        background-color: #797c79; /* 배경색 */
         border: none; /* 테두리 없앰 */
         color: white; /* 글자색 */
         padding: 2px 5px; /* 안쪽 여백 */
@@ -179,7 +167,7 @@
     }
 
     button:hover {
-        background-color: #3e8e41; /* 배경색 변경 */
+        background-color: #515251; /* 배경색 변경 */
     }
 
     img {
@@ -235,23 +223,38 @@
     .review-form-container {
         display: flex;
         flex-direction: column;
+        justify-self: flex-start;
         gap: 1rem;
-        max-width: 1000px;
         margin: auto;
-        margin-right: 40px;
+        margin-right: 60px;
+        background-color: gray;
+        width: 1050px;
+        padding: 20px;
+        border-radius: 15px;
+        border-top: 3px solid black;
+        border-bottom: 3px solid black;
+    }
+    
+    .review-form-container button {
+        background-color: black;
+    }
+
+    .review-form-container button:hover {
+        background-color: rgb(46, 46, 46);
     }
 
     label {
         font-weight: bold;
         display: flex;
-        margin-left: 15px;
+        margin-left: 18px;
         font-size: 15px;
-        color: #f6f6fa;
+        color: #000000;
     }
 
     input[type="text"],
     textarea {
         padding: 0.5rem;
+        width: 80%;
         border: 1px solid #ccc;
         border-radius: 4px;
     }

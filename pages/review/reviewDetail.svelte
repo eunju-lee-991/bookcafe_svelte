@@ -67,21 +67,6 @@
     let reviewDetails = {};
     let bookinfo = {};
 
-    axios
-        .get("http://localhost:8080/reviews/" + reviewId, {
-            withCredentials: true,
-        })
-        .then((res) => {
-            reviewDetails = res.data.review;
-            let myIsbn = reviewDetails.isbn;
-
-            bookinfo = getBookInfo(myIsbn);
-        })
-        .catch((err) => {
-            console.log(err);
-            alert("오류가 발생했습니다");
-        });
-
     const getBookInfo = (myIsbn) =>
         axios
             .get("https://dapi.kakao.com/v3/search/book", {
@@ -97,6 +82,23 @@
                 console.log(error);
                 alert("에러가 발생했습니다.");
             });
+            
+    axios
+        .get("http://localhost:8080/reviews/" + reviewId, {
+            withCredentials: true,
+        })
+        .then((res) => {
+            reviewDetails = res.data.review;
+            let myIsbn = reviewDetails.isbn;
+
+            bookinfo = getBookInfo(myIsbn);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert("오류가 발생했습니다");
+        });
+
+
 </script>
 
 <main>

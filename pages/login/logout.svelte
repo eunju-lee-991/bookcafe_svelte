@@ -28,3 +28,22 @@
             alert("오류가 발생했습니다");
         });
 </script>
+
+<main>
+    <h1>로그아웃...</h1>
+</main>
+
+<style>
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+        background-color: #222;
+}
+
+h1 {
+  text-align: center;
+  color: wheat;
+}
+</style>

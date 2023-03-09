@@ -30,7 +30,6 @@
         const clientHeight = document.documentElement.clientHeight;
 
         if (scrollTop + clientHeight + 5 >= scrollHeight) {
-            console.log("the end");
             nextSearch();
         }
     };

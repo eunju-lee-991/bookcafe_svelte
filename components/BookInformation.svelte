@@ -78,7 +78,6 @@
         }
 
         const reviewForm = {
-            memberId: _memberId,
             title: _title,
             contents: _contents,
             isbn: _isbn,

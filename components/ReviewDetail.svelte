@@ -29,8 +29,7 @@
 
    const doLike = () => {
       const data = {
-         reviewId: reviewDetails.reviewId,
-         memberId: loginMemberId,
+         reviewId: reviewDetails.reviewId
       };
 
       axios

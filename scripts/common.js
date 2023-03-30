@@ -1,5 +1,5 @@
 export const checkLogIn = () => {
-    const memberId = getCookie("memberId");
+    const memberId = getCookie("nickname");
 
     if (memberId) {
         return true;

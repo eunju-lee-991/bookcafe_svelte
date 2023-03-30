@@ -7,6 +7,27 @@
   let parsed = {};
   let code = "";
   let message = "로그인 중...";
+  let accessToken;
+
+  const testJWT = () => {
+    axios
+      .get("http://localhost:8080/api/jwt-test", {
+        withCredentials: true, 
+        headers: {
+        Authorization: "Bearer " + accessToken,
+  },
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          console.log(res);
+         
+        }
+      })
+      .catch((err) => {
+        console.log('err')
+        console.log(err)
+      });
+  }
 
   if (typeof window !== "undefined") {
     parsed = queryString.parse(window.location.search);
@@ -36,13 +57,13 @@
           let propertyCookie =
             "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
 
-          // memberId 쿠키 설정
-          let loggedInId = res.data.member.id;
+          //  쿠키 설정
           let nickname = res.data.member.nickname;
-          document.cookie = "memberId=" + loggedInId + propertyCookie;
           document.cookie = "nickname=" + nickname + propertyCookie;
 
-          setTimeout(() => location.replace("/main"), 100);
+          accessToken = res.data.tokenInfo.accessToken;
+
+          // setTimeout(() => location.replace("/main"), 100);
         }
       })
       .catch((err) => {
@@ -57,6 +78,7 @@
 
 <main>
   <h1>{message}</h1>
+  <button on:click={testJWT}> JWT TEST </button>
 </main>
 
 <style>

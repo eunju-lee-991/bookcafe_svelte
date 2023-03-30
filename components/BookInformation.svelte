@@ -10,6 +10,21 @@
     let buttonContents = "리뷰쓰기";
     let contentLength = 180;
     let showAll = false;
+    let accessToken;
+
+    onMount(() => {
+        if(accessToken == null || accessToken == ""){ 
+            accessToken = getAccessToken();
+        }
+    });
+
+    afterUpdate(() => {
+        scrollPosition = window.pageYOffset;
+    });
+
+    const getAccessToken = () => {
+
+    }
 
     const toggleShowAll = (e) => {
         e.preventDefault();
@@ -20,10 +35,6 @@
         str = str.substr(0, length);
         return str;
     };
-
-    afterUpdate(() => {
-        scrollPosition = window.pageYOffset;
-    });
 
     const toggleWriteReview = () => {
         if (!checkLogIn()) {
@@ -59,15 +70,10 @@
     const writeReview = () => {
         const _title = document.getElementById("title").value;
         const _contents = document.getElementById("contents").value;
-        const _memberId = getCookie("memberId");
         let _isbn = bookinfo.isbn.includes(" ")
             ? bookinfo.isbn.split(" ")[1]
             : bookinfo.isbn;
 
-        if (!_memberId) {
-            alert("로그인을 해주세요");
-            location.href = "/login";
-        }
         if (!_title.trim()) {
             alert("제목을 입력해주세요");
             return;
@@ -91,6 +97,7 @@
                 {
                     withCredentials: true,
                     headers: {
+                        "Authorization": "Bearer " + accessToken,
                         "Content-Type": "application/json",
                     },
                 } 
@@ -102,7 +109,8 @@
                 location.href = "reviews/" + reviewId;
             })
             .catch((error) => {
-                console.log(error.response.data);
+                console.log(error);
+                console.log(error.response);
                 alert("오류가 발생했습니다");
             });
     };
